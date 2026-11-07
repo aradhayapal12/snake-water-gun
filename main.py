@@ -19,7 +19,7 @@ if "game_over" not in st.session_state:
 yourD = {"Snake": 1, "Water": 2, "Gun": 3}
 reverseD = {1: "Snake", 2: "Water", 3: "Gun"}
 
-# Move buttons (use_container_width makes them big and full-width)
+# Move buttons
 col1, col2, col3 = st.columns(3)
 user_choice = None
 
@@ -45,13 +45,12 @@ with col3:
     ):
         user_choice = "Gun"
 
-# Calculate outcome BEFORE showing scores (fixes instant score delay!)
+# Process game round only if game is active AND a button was clicked
 if user_choice and not st.session_state.game_over:
     computer_num = random.choice([1, 2, 3])
     computer_choice = reverseD[computer_num]
     you_num = yourD[user_choice]
 
-    # Decide round winner
     if computer_num == you_num:
         result = "🤝 It's a Draw!"
     elif (
@@ -65,27 +64,25 @@ if user_choice and not st.session_state.game_over:
         result = "💻 Computer Wins this round!"
         st.session_state.computer_score += 1
 
-    # Save round message with both picks shown clearly
     st.session_state.last_msg = (
         f"You picked **{user_choice}** | Computer picked **{computer_choice}**\n\n{result}"
     )
 
-    # Check for match winner at 5 points
     if st.session_state.user_score == 5 or st.session_state.computer_score == 5:
         st.session_state.game_over = True
 
 st.write("---")
 
-# Display updated score instantly
+# Show score metric
 score_col1, score_col2 = st.columns(2)
 score_col1.metric("Your Score", st.session_state.user_score)
 score_col2.metric("Computer Score", st.session_state.computer_score)
 
-# Display picks & round results
+# Display last result
 if st.session_state.last_msg:
     st.info(st.session_state.last_msg)
 
-# Match over popup / section
+# Game Over Screen
 if st.session_state.game_over:
     st.write("---")
     if st.session_state.user_score == 5:
@@ -94,5 +91,18 @@ if st.session_state.game_over:
     else:
         st.error("💀 **ROUND OVER: COMPUTER WON THE MATCH!**")
 
+    # Clean reset on Play Again button
     if st.button("🔄 Play Again", type="primary"):
-        st.session_state.user_score
+        st.session_state.user_score = 0
+        st.session_state.computer_score = 0
+        st.session_state.game_over = False
+        st.session_state.last_msg = ""
+        st.rerun()
+
+st.write("---")
+if st.button("Reset Game"):
+    st.session_state.user_score = 0
+    st.session_state.computer_score = 0
+    st.session_state.game_over = False
+    st.session_state.last_msg = ""
+    st.rerun()
