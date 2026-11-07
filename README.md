@@ -3,7 +3,7 @@
 A simple, interactive Snake Water Gun web app built in Python using Streamlit.
 
 ## 🔗 Live Demo
-Play the game live here: **[snake-water-gun](YOUR_STREAMLIT_APP_LINK_HERE)**
+Play the game live here: **[snake-water-gun](https://snake-water-gun-9tvyknxydrtxthbvoxjqug.streamlit.app/)**
 
 ## 🎮 Game Rules
 - 🐍 **Snake** drinks 🌊 **Water** (Snake wins)
